@@ -49,9 +49,9 @@ with open(load_path, 'r') as infile:
 
 
 # initialize database
-db = sqlite3.connect('data/plos_cb_abstracts.db')
+db = sqlite3.connect('data/plos_cb_abstracts1.db')
 cursor = db.cursor()
-cursor.execute('''CREATE TABLE plos_cb_abstracts(id INTEGER PRIMARYKEY,
+cursor.execute('''CREATE TABLE plos_cb_abstracts1(id INTEGER PRIMARYKEY,
                     url TEXT, authors TEXT, date TEXT, title TEXT, abstract TEXT, author_summary TEXT)
                     ''')
 db.commit()
@@ -110,7 +110,7 @@ def process_url(url,html):
                                   "author_summary":author_summary}
         
         # add article data object to a database        
-        cursor.execute('''INSERT INTO plos_cb_abstracts(url, authors, date, title, abstract, author_summary)
+        cursor.execute('''INSERT INTO plos_cb_abstracts1(url, authors, date, title, abstract, author_summary)
                 VALUES(:url, :authors, :date, :title, :abstract, :author_summary)''',
                 article_data_object)
 
