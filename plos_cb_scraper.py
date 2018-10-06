@@ -14,7 +14,13 @@ import urllib
 from bs4 import BeautifulSoup
 
 
+####################################################################
 
+# load the list of editions conveniently saved as json
+load_path = "data/ploscompbio_editions_3years.json"
+target_db_name = 'plos_cb_abstracts_3years' # sql database for scraped data
+
+####################################################################
 
 # class for handling the JavaScript rendering
 class WebPage(QtWebKit.QWebPage):  
@@ -41,19 +47,17 @@ class WebPage(QtWebKit.QWebPage):
             print('CONGRATULATIONS # processing complete')
             QtGui.qApp.quit()
 
-# load the list of editions conveniently saved as json
-load_path = "data/ploscompbio_editions.json"
+
 
 with open(load_path, 'r') as infile:  
     list_of_editions = json.load(infile)
 
-
 # initialize database
-db = sqlite3.connect('data/plos_cb_abstracts1.db')
+db = sqlite3.connect('data/' + target_db_name + '.db')
 cursor = db.cursor()
-cursor.execute('''CREATE TABLE plos_cb_abstracts1(id INTEGER PRIMARYKEY,
+cursor.execute('''CREATE TABLE {} (id INTEGER PRIMARYKEY,
                     url TEXT, authors TEXT, date TEXT, title TEXT, abstract TEXT, author_summary TEXT)
-                    ''')
+                    '''.format(target_db_name))
 db.commit()
 
 ##### logic for scraping editions and articles within editions
@@ -110,8 +114,8 @@ def process_url(url,html):
                                   "author_summary":author_summary}
         
         # add article data object to a database        
-        cursor.execute('''INSERT INTO plos_cb_abstracts1(url, authors, date, title, abstract, author_summary)
-                VALUES(:url, :authors, :date, :title, :abstract, :author_summary)''',
+        cursor.execute('''INSERT INTO {} (url, authors, date, title, abstract, author_summary)
+                VALUES(:url, :authors, :date, :title, :abstract, :author_summary)'''.format(target_db_name),
                 article_data_object)
 
         db.commit()
