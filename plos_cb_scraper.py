@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 ####################################################################
 
 # load the list of editions conveniently saved as json
-load_path = "data/ploscompbio_editions_3years.json"
-target_db_name = 'plos_cb_abstracts_3years' # sql database for scraped data
+load_path = "data/ploscompbio_editions_throughSeptember2018.json"
+target_db_name = 'plos_cb_abstracts_throughSeptember2018' # sql database for scraped data
 
 ####################################################################
 
